@@ -8,7 +8,7 @@ import { changeAvailabilty } from '../controllers/doctorController.js'
 
 const adminRouter=express.Router()
 
-adminRouter.post('/add-doctor', authAdmin ,upload.single('image'), addDoctor)
+adminRouter.post('/add-doctor', authAdmin, upload.single('image'), addDoctor);
 // upload single is the middleware and automatically have its next() which pasees the app.file to the next function
 // called after it 
 

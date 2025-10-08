@@ -7,91 +7,112 @@ import appointmentModel from '../models/appointmentModel.js'
 import userModel from '../models/userModel.js'
 
 // Controller: Add a new doctor
+import cloudinary from "../config/cloudinary.js"; // make sure you have Cloudinary configured
+
 const addDoctor = async (req, res) => {
-    try {
-        const {
-            name,
-            email,
-            password,
-            speciality,
-            degree,
-            experience,
-            about,
-            fees,
-            address
-        } = req.body
+  try {
+    const {
+      name,
+      email,
+      password,
+      speciality,
+      degree,
+      experience,
+      about,
+      fees,
+      address,
+    } = req.body;
 
-        const imageFile = req.file
+    const imageFile = req.file;
 
-        // 1. Check for missing required fields
-        if (!name || !email || !password || !speciality || !degree || !experience || !about || !fees || !address) {
-            return res.status(400).json({ success: false, message: "Missing required details" })
-        }
-
-        // 2. Validate email format
-        if (!validator.isEmail(email)) {
-            return res.status(400).json({ success: false, message: "Enter a valid email address" })
-        }
-
-        // 3. Check if email already exists
-        const existingDoctor = await doctorModel.findOne({ email })
-        if (existingDoctor) {
-            return res.status(409).json({ success: false, message: "Doctor with this email already exists" })
-        }
-
-        // 4. Validate password strength
-        if (password.length < 8) {
-            return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" })
-        }
-
-        // 5. Hash password
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password, salt)
-
-        // 6. Upload image to Cloudinary
-        let imageUrl = ""
-        if (imageFile?.path) {
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-                resource_type: "image"
-            })
-            imageUrl = imageUpload.secure_url
-        }
-
-        // 7. Parse address safely
-        let parsedAddress
-        try {
-            parsedAddress = JSON.parse(address)
-        } catch (err) {
-            return res.status(400).json({ success: false, message: "Invalid address format. Must be JSON string." })
-        }
-
-        // 8. Prepare doctor data
-        const doctorData = {
-            name,
-            email,
-            image: imageUrl,
-            password: hashedPassword,
-            speciality,
-            degree,
-            experience,
-            about,
-            fees,
-            address: parsedAddress,
-            date: Date.now()
-        }
-
-        // 9. Save to database
-        const newDoctor = new doctorModel(doctorData)
-        await newDoctor.save()
-
-        // 10. Respond with success
-        res.status(201).json({ success: true, message: "Doctor added successfully" })
-
-    } catch (error) {
-        console.error("Error adding doctor:", error)
-        res.status(500).json({ success: false, message: "Server error: " + error.message })
+    // 1. Check for missing required fields
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !speciality ||
+      !degree ||
+      !experience ||
+      !about ||
+      !fees ||
+      !address
+    ) {
+      return res.status(400).json({ success: false, message: "Missing required details" });
     }
-}
+
+    // 2. Validate email
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ success: false, message: "Enter a valid email address" });
+    }
+
+    // 3. Check if email exists
+    const existingDoctor = await doctorModel.findOne({ email });
+    if (existingDoctor) {
+      return res.status(409).json({ success: false, message: "Doctor with this email already exists" });
+    }
+
+    // 4. Password length check
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" });
+    }
+
+    // 5. Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // 6. Upload image to Cloudinary from memory buffer
+    let imageUrl = "";
+    if (imageFile) {
+      const streamUpload = (buffer) => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { resource_type: "image" },
+            (error, result) => {
+              if (result) resolve(result);
+              else reject(error);
+            }
+          );
+          stream.end(buffer);
+        });
+      };
+
+      const uploadResult = await streamUpload(imageFile.buffer);
+      imageUrl = uploadResult.secure_url;
+    }
+
+    // 7. Parse address
+    let parsedAddress;
+    try {
+      parsedAddress = JSON.parse(address);
+    } catch (err) {
+      return res.status(400).json({ success: false, message: "Invalid address format. Must be JSON string." });
+    }
+
+    // 8. Prepare doctor object
+    const doctorData = {
+      name,
+      email,
+      image: imageUrl,
+      password: hashedPassword,
+      speciality,
+      degree,
+      experience: Number(experience),
+      about,
+      fees: Number(fees),
+      address: parsedAddress,
+      date: Date.now(),
+    };
+
+    // 9. Save to DB
+    const newDoctor = new doctorModel(doctorData);
+    await newDoctor.save();
+
+    res.status(201).json({ success: true, message: "Doctor added successfully" });
+  } catch (error) {
+    console.error("Error adding doctor:", error);
+    res.status(500).json({ success: false, message: "Server error: " + error.message });
+  }
+};
 
 
 // API FOR THE ADMIN LOGIN

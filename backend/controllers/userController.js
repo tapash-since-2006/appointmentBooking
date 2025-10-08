@@ -7,6 +7,7 @@ import doctorModel from '../models/doctorModel.js'
 import appointmentModel from '../models/appointmentModel.js'
 import Stripe from 'stripe'
 
+
 // API for registering the user
 const registerUser = async (req, res) => {
     try {
@@ -102,23 +103,42 @@ const updateProfile = async (req, res) => {
         const { userId } = req.user
         const imageFile = req.file
 
+        // 1. Check required fields
         if (!name || !phone || !dob || !gender || !address) {
             return res.json({ success: false, message: "Data Missing" })
         }
 
-        await userModel.findByIdAndUpdate(userId, { name, phone, address: JSON.parse(address), dob, gender })
+        // 2. Update basic fields
+        await userModel.findByIdAndUpdate(userId, {
+            name,
+            phone,
+            address: JSON.parse(address),
+            dob,
+            gender
+        })
 
-
+        // 3. Upload image if provided
         if (imageFile) {
+            const streamUpload = (buffer) => {
+                return new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { resource_type: "image" },
+                        (error, result) => {
+                            if (result) resolve(result)
+                            else reject(error)
+                        }
+                    )
+                    stream.end(buffer)
+                })
+            }
 
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: 'image' })
-            const imageUrl = imageUpload.secure_url
+            const uploadResult = await streamUpload(imageFile.buffer)
+            const imageUrl = uploadResult.secure_url
 
             await userModel.findByIdAndUpdate(userId, { image: imageUrl })
-
         }
 
-        res.json({ success: true, message: "profile updated" })
+        res.json({ success: true, message: "Profile updated" })
 
     } catch (error) {
         console.log(error)

@@ -7,7 +7,6 @@ import appointmentModel from '../models/appointmentModel.js'
 import userModel from '../models/userModel.js'
 
 // Controller: Add a new doctor
-import cloudinary from "../config/cloudinary.js"; // make sure you have Cloudinary configured
 
 const addDoctor = async (req, res) => {
   try {

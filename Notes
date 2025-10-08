@@ -1,0 +1,73 @@
+Common Types of HTTP Requests
+1. GET
+
+Meaning: Retrieve data from the server.
+
+Use case: When you want to fetch or read data (like getting a webpage or fetching user info).
+
+Example: Loading a webpage, fetching a list of products.
+--------------------------------------------------------------------------------------------------------------
+2. POST
+
+Meaning: Send data to the server to create something new.
+
+Use case: When submitting a form, creating a new user, or uploading a file.
+
+Example: Registering on a website, posting a comment.
+
+--------------------------------------------------------------------------------------------------------------
+
+
+3. PUT
+
+Meaning: Update or replace existing data on the server.
+
+Use case: When you want to update an entire resource (like updating all user info).
+
+Example: Updating a user profile completely.
+
+--------------------------------------------------------------------------------------------------------------
+
+
+4. PATCH
+
+Meaning: Partially update existing data on the server.
+
+Use case: When you want to update only certain fields of a resource.
+
+Example: Changing just the email or password of a user.
+
+--------------------------------------------------------------------------------------------------------------
+
+
+5. DELETE
+
+Meaning: Remove data from the server.
+
+Use case: When you want to delete a resource.
+
+Example: Deleting a user account or a post.
+
+--------------------------------------------------------------------------------------------------------------
+
+
+6. HEAD
+
+Meaning: Same as GET but only fetches headers, no body.
+
+Use case: To check if a resource exists or to get metadata without downloading the whole content.
+
+Example: Checking if a file is available before downloading.
+
+--------------------------------------------------------------------------------------------------------------
+
+
+7. OPTIONS
+
+Meaning: Ask the server which HTTP methods it supports for a resource.
+
+Use case: To know what actions are allowed on a URL.
+
+Example: Preflight request in CORS to check permissions.
+
+--------------------------------------------------------------------------------------------------------------

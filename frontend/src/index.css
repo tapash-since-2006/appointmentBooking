@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+*{
+    font-family: "EB Garamond", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.active hr{
+    @apply block
+}
+
+::-webkit-scrollbar{
+    @apply hidden
+}
+
+@media(max-width:740px){
+    .active p{
+        @apply text-white bg-primary
+    }
+}
+
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #00809D;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.text-primary {
+  @apply text-[#1e3a8a]; /* or your brand blue */
+}

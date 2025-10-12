@@ -9,7 +9,7 @@ const AppContextProvider=(props)=>{
     const currencySymbol='$' // this is to  be done beacuse now depending on the country the currency value can be 
     // easily changed by chnaging one value here only
 
-    const backendUrl="https://appointmentbooking-08it.onrender.com"
+    const backendUrl="https://appointmentbooking-skg2.onrender.com"
 
     const[doctors, setDoctors]=useState([])
     const[token, setToken]=useState(localStorage.getItem('token')?localStorage.getItem('token'):null)

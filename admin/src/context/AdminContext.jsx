@@ -11,7 +11,7 @@ const AdminContextProvider=(props)=>{
     const [appointments, setAppointments]=useState([])
     const[dashData, setDashData]=useState(null)
 
-    const backendUrl="https://appointmentbooking-08it.onrender.com"
+    const backendUrl="https://appointmentbooking-skg2.onrender.com"
 
     const getAllDoctors=async()=>{
         try {

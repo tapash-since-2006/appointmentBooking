@@ -19,7 +19,7 @@ export const Navbar = () => {
 
   return (
     <div className='flex item-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
-        <img src='../../public/Preview.png' className='w-44 cursor-pointer' onClick={()=>navigate('/')}></img>
+        <img src='/Preview.png' className='w-44 cursor-pointer' onClick={()=>navigate('/')}></img>
         <div></div>
         <div></div>
         <div></div>

@@ -31,6 +31,7 @@ const TopDoctors = () => {
                   src={item.image}
                   alt={item.name}
                   className='w-24 h-24 object-cover rounded-full border-4 border-blue-200'
+                  loading="lazy" // <-- lazy loading added here
                 />
                 {item.available ? (
                   <FaCheckCircle className='absolute -bottom-1 -right-1 text-green-500 bg-white rounded-full text-xl' />

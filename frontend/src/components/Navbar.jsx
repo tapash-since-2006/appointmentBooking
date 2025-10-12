@@ -63,7 +63,7 @@ export const Navbar = () => {
                 </div>
               </div>
             </div>
-            :<button className='bg-primary text-white px-8 py-3 rounded-full font-semibold hidden md:block' onClick={()=>navigate('/login')}>Create Account</button>
+            :<button className='bg-primary text-white px-8 py-3 rounded-full font-semibold hidden md:block' onClick={()=>navigate('/login')}>Create Account/Sign in</button>
           }
 
           <img onClick={()=>setShowMenu(true)} src={assets.menu_icon} className='w-6 md:hidden'/>

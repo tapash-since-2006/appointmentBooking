@@ -39,11 +39,11 @@ app.get("/api/health", async (req, res) => {
 
     // Quick warm-up query to keep MongoDB active
     if (dbStatus === "connected") {
-      doctorCount = await doctorModel.countDocuments(); // ✅ use correct model
+      doctorCount = await doctorModel.countDocuments(); 
     }
   } catch (err) {
     dbStatus = "error";
-    console.error("Health check error:", err.message); // optional debug
+    console.error("Health check error:", err.message); 
   }
 
   res.status(200).json({

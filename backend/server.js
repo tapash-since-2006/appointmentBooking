@@ -6,7 +6,7 @@ import connectCloudinary from './config/cloudinary.js'
 import adminRouter from './routes/adminRoute.js'
 import doctorRouter from './routes/doctorRoute.js'
 import userRouter from './routes/userRoute.js'
-import Doctor from "./models/doctorModel.js";
+import doctorModel from "./models/doctorModel.js";
 
 
 const app=express()

@@ -27,7 +27,32 @@ app.get('/', (req, res)=>{
     res.send('API WORKING....')
 })
 
+import Doctor from "./models/doctorModel.js"; // ✅ import your model
 
+app.get("/api/health", async (req, res) => {
+  let dbStatus = "disconnected";
+  let doctorCount = 0;
+
+  try {
+    const readyStates = ["disconnected", "connected", "connecting", "disconnecting"];
+    dbStatus = readyStates[mongoose.connection.readyState];
+
+    // Quick warm-up query to keep MongoDB active
+    if (dbStatus === "connected") {
+      doctorCount = await Doctor.countDocuments();
+    }
+  } catch (err) {
+    dbStatus = "error";
+  }
+
+  res.status(200).json({
+    success: true,
+    server: "running",
+    database: dbStatus,
+    totalDoctors: doctorCount,
+    timestamp: new Date().toISOString(),
+  });
+});
 
 
 

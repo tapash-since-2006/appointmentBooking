@@ -6,6 +6,8 @@ import connectCloudinary from './config/cloudinary.js'
 import adminRouter from './routes/adminRoute.js'
 import doctorRouter from './routes/doctorRoute.js'
 import userRouter from './routes/userRoute.js'
+import Doctor from "./models/doctorModel.js";
+
 
 const app=express()
 const port=process.env.PORT||4000
@@ -27,7 +29,6 @@ app.get('/', (req, res)=>{
     res.send('API WORKING....')
 })
 
-import Doctor from "./models/doctorModel.js"; // ✅ import your model
 
 app.get("/api/health", async (req, res) => {
   let dbStatus = "disconnected";

@@ -6,11 +6,11 @@ import connectCloudinary from './config/cloudinary.js'
 import adminRouter from './routes/adminRoute.js'
 import doctorRouter from './routes/doctorRoute.js'
 import userRouter from './routes/userRoute.js'
-import doctorModel from "./models/doctorModel.js";
+import mongoose from 'mongoose'             
+import doctorModel from "./models/doctorModel.js"; 
 
-
-const app=express()
-const port=process.env.PORT||4000
+const app = express()
+const port = process.env.PORT || 4000
 connectDB()
 connectCloudinary()
 
@@ -20,16 +20,15 @@ app.use(cors())
 
 // API endpoints
 app.use('/api/admin', adminRouter)     
-// “Hey Express, for any URL that starts with /api/admin, go look inside adminRouter to handle it.”
 app.use('/api/doctor', doctorRouter)
 app.use('/api/user', userRouter)
 
-
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.send('API WORKING....')
 })
 
 
+// just for checking part
 app.get("/api/health", async (req, res) => {
   let dbStatus = "disconnected";
   let doctorCount = 0;
@@ -40,10 +39,11 @@ app.get("/api/health", async (req, res) => {
 
     // Quick warm-up query to keep MongoDB active
     if (dbStatus === "connected") {
-      doctorCount = await Doctor.countDocuments();
+      doctorCount = await doctorModel.countDocuments(); // ✅ use correct model
     }
   } catch (err) {
     dbStatus = "error";
+    console.error("Health check error:", err.message); // optional debug
   }
 
   res.status(200).json({
@@ -55,8 +55,5 @@ app.get("/api/health", async (req, res) => {
   });
 });
 
+app.listen(port, () => console.log("Server Started at Port: ", port))
 
-
-
-
-app.listen(port, ()=>console.log("Server Started at Port: ", port))
